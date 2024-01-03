@@ -1,0 +1,44 @@
+image: node:20.10.0
+
+default:
+  tags:
+    - docker
+  before_script:
+    - npm ci --cache .npm --prefer-offline
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .npm/
+
+stages:
+  - build
+  - lint
+  - deploy
+
+build:
+  stage: build
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - npm run build
+  artifacts:
+    paths:
+      - dist/
+
+lint:
+  stage: lint
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  script:
+    - npm run lint
+
+package:
+  stage: deploy
+  needs:
+  - job: build
+    artifacts: true
+  script:
+    - ls # TODO
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
