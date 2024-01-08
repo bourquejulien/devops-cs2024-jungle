@@ -35,18 +35,22 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          {{- with .Values.container.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.container.port }}
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /jungle/status
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /jungle/status
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
