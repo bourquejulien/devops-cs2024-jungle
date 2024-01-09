@@ -22,8 +22,6 @@ VARIABLES+=("--set=image.tag=\"${IMAGE_TAG}\"")
 VARIABLES+=("--set=ingress.hosts[0].host=\"ai${TEAM_NAME}.${DOMAIN_NAME}\"")
 VARIABLES="$(IFS=" " ; echo "${VARIABLES[*]}")"
 
-
-echo $VARIABLES
 if ! (helm ls  | grep $PROJECT_NAME) then
    echo "Installing Helm Chart"
    eval helm install -f helm/values.yaml $PROJECT_NAME helm/ $VARIABLES

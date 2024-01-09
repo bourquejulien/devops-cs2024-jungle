@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   repository: "***"
-  pullPolicy: IfNotPresent
+  pullPolicy: Always
   tag: "latest"
 
 imagePullSecrets: [ ]
@@ -11,9 +11,7 @@ fullnameOverride: ""
 
 container:
   port: 3000
-  env:
-    - name: GLOBAL_PREFIX
-      value: "/jungle"
+  env: []
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -49,11 +47,13 @@ ingress:
   className: ""
   annotations:
     kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
   # kubernetes.io/tls-acme: "true"
   hosts:
     - host: "..."
       paths:
-        - path: /jungle
+        - path: /jungle(/|$)(.*)
           pathType: ImplementationSpecific
   tls: [ ]
   #  - secretName: chart-example-tls
