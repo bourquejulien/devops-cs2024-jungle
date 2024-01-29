@@ -7,6 +7,6 @@ export class StatusController {
 
     @Get("/status")
     getStatus(): string {
-        return this.appService.getStatus();
+        return JSON.stringify(this.appService.getStatus());
     }
 }
