@@ -8,10 +8,12 @@ import { WeatherService } from "./services/weather.service";
 import { ScheduleModule } from "@nestjs/schedule";
 import { MapService } from "./services/map.service";
 import { ConnectionService } from "./services/connection.service";
+import { DoorService } from "./services/door.service";
+import { DoorController } from "./Controllers/door.controller";
 
 @Module({
     imports: [HttpModule, ScheduleModule.forRoot()],
-    controllers: [StatusController, HealthController],
-    providers: [StatusService, StateService, WeatherService, MapService, ConnectionService],
+    controllers: [StatusController, HealthController, DoorController],
+    providers: [StatusService, StateService, WeatherService, MapService, ConnectionService, DoorService],
 })
 export class AppModule {}
