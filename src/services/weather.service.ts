@@ -20,7 +20,12 @@ export class WeatherService {
         this.logger.log("Getting weather data...");
 
         try {
-            const result = await lastValueFrom(this.httpService.post<Weather>("http://ai/team?request=weather", {}));
+            const result = await lastValueFrom(
+                this.httpService.post<Weather>("http://ai/team?request=weather", {
+                    x: 73.22975,
+                    y: -54.77347,
+                }),
+            );
 
             if (result.status !== HttpStatus.OK) {
                 this.stateService.set<FailedResult>("weather", {

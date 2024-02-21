@@ -1,4 +1,4 @@
-import { Controller, Post } from "@nestjs/common";
+import { Body, Controller, Param, Post } from "@nestjs/common";
 import { StateService } from "../services/state.service";
 import { DoorResult } from "../classes/door";
 import { FailedResult } from "../classes/result";
@@ -13,7 +13,7 @@ export class DoorController {
     constructor(private readonly stateService: StateService) {}
 
     @Post("/unlock")
-    unlock(password: Password) {
+    unlock(@Body() password: Password) {
         if (password.isSuccess) {
             this.stateService.set<DoorResult>("door", { isOk: true });
             return;
