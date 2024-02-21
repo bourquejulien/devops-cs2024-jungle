@@ -25,6 +25,7 @@ RUN npm run build
 
 FROM base AS final
 COPY --chown=node:node --from=build /build/dist ./dist
+COPY --chown=node:node passwords_hashed.txt .
 USER node
 
 ENTRYPOINT ["node", "dist/main.js"]
