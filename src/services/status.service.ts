@@ -4,6 +4,7 @@ import { WeatherResult } from "../classes/weather";
 import { Result } from "../classes/result";
 import { MapResult } from "../classes/map";
 import { ConnectionResult } from "../classes/connection-result";
+import { DoorResult } from "../classes/door";
 
 interface Step {
     name: string;
@@ -31,6 +32,11 @@ export class StatusService {
         const map = this.stateService.get<MapResult>("map");
         if (map !== undefined) {
             messages.push({ name: "Map", status: this.getDescription(map) });
+        }
+
+        const door = this.stateService.get<DoorResult>("door");
+        if (door !== undefined) {
+            messages.push({ name: "Door", status: this.getDescription(door) });
         }
 
         return messages;
