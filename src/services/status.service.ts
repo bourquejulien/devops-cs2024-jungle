@@ -29,7 +29,7 @@ export class StatusService {
         }
 
         const map = this.stateService.get<MapResult>("map");
-        if (weather !== undefined) {
+        if (map !== undefined) {
             messages.push({ name: "Map", status: this.getDescription(map) });
         }
 
