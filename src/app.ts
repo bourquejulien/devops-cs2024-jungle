@@ -1,4 +1,3 @@
-import logger from "winston";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { ConfigModule } from "@nestjs/config";

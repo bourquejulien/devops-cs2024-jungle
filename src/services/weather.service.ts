@@ -1,9 +1,10 @@
 import { HttpStatus, Injectable, Logger } from "@nestjs/common";
 import { Cron } from "@nestjs/schedule";
 import { HttpService } from "@nestjs/axios";
-import { Weather } from "../classes/weather";
+import { Weather, WeatherResult } from "../classes/weather";
 import { lastValueFrom } from "rxjs";
 import { StateService } from "./state.service";
+import { FailedResult } from "../classes/result";
 
 @Injectable()
 export class WeatherService {
@@ -16,7 +17,6 @@ export class WeatherService {
 
     @Cron("0,30 * * * * *")
     async handleCron() {
-        let weather: Weather | undefined = undefined;
         this.logger.log("Getting weather data...");
 
         try {
@@ -24,12 +24,20 @@ export class WeatherService {
                 this.httpService.get<Weather>("http://ai/team?request=weather&address=none", {}),
             );
 
-            weather = result.status === HttpStatus.OK ? result.data : undefined;
+            if (result.status !== HttpStatus.OK) {
+                this.stateService.set<FailedResult>("weather", {
+                    isOk: false,
+                    description: `Error code: ${result.status}`,
+                });
+            }
+
+            this.stateService.set<WeatherResult>("weather", { weather: result.data, isOk: true });
         } catch (e) {
             this.logger.warn("Failed to parse weather data");
-            weather = undefined;
+            this.stateService.set<FailedResult>("weather", {
+                description: "Failed to parse weather data",
+                isOk: false,
+            });
         }
-
-        this.stateService.set("weather", weather);
     }
 }
