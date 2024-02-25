@@ -5,6 +5,7 @@ import { lastValueFrom } from "rxjs";
 import { StateService } from "./state.service";
 import { Map, MapResult } from "../classes/map";
 import { FailedResult } from "../classes/result";
+import { AxiosError } from "axios";
 
 @Injectable()
 export class MapService {
@@ -51,9 +52,11 @@ export class MapService {
 
             this.stateService.set<MapResult>("map", { map: map, isOk: true });
         } catch (e) {
+            const message = e instanceof AxiosError ? e.response.data : "Request failed";
+            this.logger.warn(message);
             this.stateService.set<FailedResult>("map", {
+                description: message,
                 isOk: false,
-                description: "Request failed with exception",
             });
         }
     }

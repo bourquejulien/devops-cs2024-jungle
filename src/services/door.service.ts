@@ -5,6 +5,8 @@ import { Cron } from "@nestjs/schedule";
 import { lastValueFrom } from "rxjs";
 import { HttpService } from "@nestjs/axios";
 import * as fs from "fs";
+import { AxiosError } from "axios";
+import { FailedResult } from "../classes/result";
 
 @Injectable()
 export class DoorService {
@@ -35,7 +37,8 @@ export class DoorService {
                 this.logger.warn("Failed to ask password");
             }
         } catch (e) {
-            this.logger.warn("Failed to ask password");
+            const message = e instanceof AxiosError ? e.response.data : "Request failed";
+            this.logger.warn(message);
         }
     }
 }

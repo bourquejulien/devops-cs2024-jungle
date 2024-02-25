@@ -5,6 +5,7 @@ import { Weather, WeatherResult } from "../classes/weather";
 import { lastValueFrom } from "rxjs";
 import { StateService } from "./state.service";
 import { FailedResult } from "../classes/result";
+import { AxiosError } from "axios";
 
 @Injectable()
 export class WeatherService {
@@ -36,9 +37,10 @@ export class WeatherService {
 
             this.stateService.set<WeatherResult>("weather", { weather: result.data, isOk: true });
         } catch (e) {
-            this.logger.warn("Failed to parse weather data");
+            const message = e instanceof AxiosError ? e.response.data : "Request failed";
+            this.logger.warn(message);
             this.stateService.set<FailedResult>("weather", {
-                description: "Failed to parse weather data",
+                description: message,
                 isOk: false,
             });
         }

@@ -5,6 +5,7 @@ import { lastValueFrom } from "rxjs";
 import { StateService } from "./state.service";
 import { ConnectionResult } from "../classes/connection-result";
 import { FailedResult } from "../classes/result";
+import { AxiosError } from "axios";
 
 @Injectable()
 export class ConnectionService {
@@ -28,12 +29,14 @@ export class ConnectionService {
 
             this.stateService.set<FailedResult>("connection", {
                 isOk: false,
-                description: `Status: ${result.status}`,
+                description: `Status: ${result.data}`,
             });
         } catch (e) {
+            const message = e instanceof AxiosError ? e.response.data : "Request failed";
+            this.logger.warn(message);
             this.stateService.set<FailedResult>("connection", {
+                description: message,
                 isOk: false,
-                description: "Request failed with exception",
             });
         }
     }
