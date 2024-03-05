@@ -26,7 +26,7 @@ docker build --target final -t "$IMAGE_NAME" .
 docker push "$IMAGE_NAME"
 
 deploy_to_aks () {
-   az aks get-credentials --overwrite-existing --resource-group "CS-$1-rg" --name "${CLUSTER_NAME}cluster"
+    az aks get-credentials --overwrite-existing --resource-group "CS-$1-rg" --name "${CLUSTER_NAME}cluster"
 
     VARIABLES=("--set=image.repository=\"${REPO_NAME}/${PROJECT_NAME}\"")
     VARIABLES+=("--set=image.tag=\"${IMAGE_TAG}\"")
