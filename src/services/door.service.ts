@@ -26,7 +26,7 @@ export class DoorService {
         this.logger.log("Asking password...");
 
         try {
-            const hash = this.hashedPasswords[Math.floor(Math.random() * this.hashedPasswords.length)]
+            const hash = this.hashedPasswords[Math.floor(Math.random() * this.hashedPasswords.length)];
             const result = await lastValueFrom(
                 this.httpService.post<Weather>("http://ai/team?request=door", {
                     hash,
