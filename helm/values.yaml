@@ -43,7 +43,7 @@ service:
   port: 80
 
 ingress:
-  enabled: true
+  enabled: false # Enable for debugging
   className: ""
   annotations:
     kubernetes.io/ingress.class: nginx
