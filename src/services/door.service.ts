@@ -37,7 +37,8 @@ export class DoorService {
                 this.logger.warn("Failed to ask password");
             }
         } catch (e) {
-            const message = e instanceof AxiosError ? e.response.data : "Request failed";
+            const warningMessage = e instanceof AxiosError ? e.response.data : "";
+            const message = `Request to service failed, ${warningMessage}`;
             this.logger.warn(message);
         }
     }

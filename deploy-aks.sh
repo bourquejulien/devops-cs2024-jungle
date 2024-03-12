@@ -28,9 +28,9 @@ docker push "$IMAGE_NAME"
 deploy_to_aks () {
     az aks get-credentials --overwrite-existing --resource-group "CS-$1-rg" --name "${CLUSTER_NAME}cluster"
 
-    VARIABLES=("--set=image.repository=\"${REPO_NAME}/${PROJECT_NAME}\"")
-    VARIABLES+=("--set=image.tag=\"${IMAGE_TAG}\"")
-    VARIABLES+=("--set=ingress.hosts[0].host=\"ai$1.${DOMAIN_NAME}\"")
+    VARIABLES=("--set-string=image.repository=\"${REPO_NAME}/${PROJECT_NAME}\"")
+    VARIABLES+=("--set-string=image.tag=\"${IMAGE_TAG}\"")
+    VARIABLES+=("--set-string=ingress.hosts[0].host=\"ai$1.${DOMAIN_NAME}\"")
     VARIABLES="$(IFS=" " ; echo "${VARIABLES[*]}")"
 
     if ! (helm ls  | grep $PROJECT_NAME) then

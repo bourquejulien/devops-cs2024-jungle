@@ -32,7 +32,8 @@ export class ConnectionService {
                 description: `Status: ${result.data}`,
             });
         } catch (e) {
-            const message = e instanceof AxiosError ? e.response.data : "Request failed";
+            const warningMessage = e instanceof AxiosError ? e.response.data : "";
+            const message = `Request to service failed, ${warningMessage}`;
             this.logger.warn(message);
             this.stateService.set<FailedResult>("connection", {
                 description: message,
